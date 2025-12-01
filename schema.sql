@@ -1,0 +1,24 @@
+-- schema.sql
+CREATE DATABASE IF NOT EXISTS amigo_secreto DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE amigo_secreto;
+
+CREATE TABLE `groups` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(191) DEFAULT NULL,
+  `owner_token` VARCHAR(191) NOT NULL,
+  `public_token` VARCHAR(191) NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `participants` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `group_id` INT NOT NULL,
+  `name` VARCHAR(191) NOT NULL,
+  `email` VARCHAR(191) DEFAULT NULL,
+  `drawn` TINYINT(1) DEFAULT 0,
+  `drawn_id` INT DEFAULT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`group_id`) REFERENCES `groups`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE INDEX idx_group ON participants(group_id);
